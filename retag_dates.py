@@ -22,21 +22,19 @@ def retag_date(file):
     # read the image data using PIL
     filename = os.path.basename(file)
     exif_dict = piexif.load(file)
-    #print("file :" + filename)
-    matches = datefinder.find_dates(filename)
-    #print(matches)
-    for match in matches:
-        date_b = match.strftime("%Y:%m:%d %H:%M:%S")
-        #print("courcou" + date_b)
-        exif_dict['0th'][piexif.ImageIFD.DateTime] = date_b
-        exif_dict['Exif'][piexif.ExifIFD.DateTimeOriginal] = date_b
-        exif_dict['Exif'][piexif.ExifIFD.DateTimeDigitized] = date_b
-        exif_bytes = piexif.dump(exif_dict)
-        piexif.insert(exif_bytes, file)
+    if piexif.ImageIFD.DateTime not in exif_dict['0th']:
+        matches = datefinder.find_dates(filename)
+        for match in matches:
+            date_b = match.strftime("%Y:%m:%d %H:%M:%S")
+            exif_dict['0th'][piexif.ImageIFD.DateTime] = date_b
+            exif_dict['Exif'][piexif.ExifIFD.DateTimeOriginal] = date_b
+            exif_dict['Exif'][piexif.ExifIFD.DateTimeDigitized] = date_b
+            exif_bytes = piexif.dump(exif_dict)
+            piexif.insert(exif_bytes, file)
     return True
 
 def main():
-    try:
+    #try:
         parser = argparse.ArgumentParser()
         parser.add_argument('--path', type=dir_path, required=True)
         parsed_args = parser.parse_args()
@@ -45,7 +43,7 @@ def main():
         for file in tqdm(glob.glob("*.JPG")):
             i=i+1
             retag_date(file)
-    except:
+    #except:
         exc_type, exc_value, tb = sys.exc_info()
         if tb is not None:
             prev = tb
