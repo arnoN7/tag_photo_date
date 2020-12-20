@@ -6,3 +6,9 @@ Supported formats :
 - 2013-12-03 19.23.48.jpg
 - 20150420_202551-1.jpg
 - 20160504_150820.jpg
+
+usage: retag_dates.py [-h] --path PATH
+
+optional arguments:
+  -h, --help   show this help message and exit
+  --path Path to the folder containing photos
