@@ -11,4 +11,4 @@ usage: retag_dates.py [-h] --path PATH
 
 optional arguments:
   -h, --help   show this help message and exit
-  --path Path to the folder containing photos
+  --path PATH  path to the folder with photos to tag
