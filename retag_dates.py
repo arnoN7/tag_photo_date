@@ -63,7 +63,7 @@ def retag_date(file):
 def main():
     #try:
         parser = argparse.ArgumentParser()
-        parser.add_argument('--path', type=dir_path, required=True)
+        parser.add_argument('--path', type=dir_path, required=True, help='path to the folder with photos to tag')
         parsed_args = parser.parse_args()
         os.chdir(parsed_args.path)
         i=0
