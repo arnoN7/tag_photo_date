@@ -2,12 +2,8 @@
 import glob, os, sys
 from datetime import date
 from datetime import datetime
-import pandas as pd
-import os.path, time
-import PIL.Image
-import PIL.ExifTags
+import os.path
 import piexif
-import datefinder
 import argparse
 from tqdm import tqdm
 import re
