@@ -16,7 +16,8 @@ def dir_path(string):
     if os.path.isdir(string):
         return string
     else:
-        raise NotADirectoryError(string)
+        print(string + "Not a directory")
+        exit(1)
 
 def try_parsing_date(text):
     for fmt in [['IMG-\d+-WA','IMG-%Y%m%d-WA'], ['\d+-\d+-\d+ \d+.\d+.\d+', '%Y-%m-%d %H.%M.%S'], ['\d+_\d+', '%Y%m%d_%H%M%S'], ['Screenshot_\d+-\d+','Screenshot_%Y%m%d-%H%M%S']]:
