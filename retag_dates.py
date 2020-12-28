@@ -7,17 +7,11 @@ import piexif
 import argparse
 from tqdm import tqdm
 import re
+from utils import dir_path
 
 MODIFIED_FILES = 0
 NO_MATCH_FILES = 0
 INCONSISTENT_EXIF = 0
-
-def dir_path(string):
-    if os.path.isdir(string):
-        return string
-    else:
-        print(string + "Not a directory")
-        exit(1)
 
 def try_parsing_date(text):
     for fmt in [['IMG-\d+-WA','IMG-%Y%m%d-WA'], ['\d+-\d+-\d+ \d+.\d+.\d+', '%Y-%m-%d %H.%M.%S'], ['\d+_\d+', '%Y%m%d_%H%M%S'], ['Screenshot_\d+-\d+','Screenshot_%Y%m%d-%H%M%S']]:
