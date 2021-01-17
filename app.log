@@ -1101,3 +1101,41 @@
 2020-12-28 13:18:00,482 [INFO] root: 72 files TAGGED
 2020-12-28 13:18:00,483 [INFO] root: 288 files ALREADY TAGGED
 2020-12-28 13:18:00,484 [INFO] root: 7 files NOT TAGGED
+2020-12-28 13:23:20,769 [INFO] root: STEP 1 ---> Loading tagged photos
+2020-12-28 13:23:20,775 [INFO] root:        1/1 = Loading folder /Users/administrateur/Pictures/testgeotag/tagged
+2021-01-02 22:32:55,534 [INFO] root: STEP 1 ---> Loading tagged photos
+2021-01-02 22:32:55,535 [INFO] root:        1/2 = Loading folder /Volumes/photo/iPhoneXS/
+2021-01-02 22:35:15,079 [INFO] root:        2/2 = Loading folder /Volumes/photo/Backup S8/
+2021-01-02 22:38:40,956 [INFO] root: STEP 2 ---> Tag photos
+2021-01-02 22:43:02,302 [INFO] root: ------- GPS TAG RESULTS ------- 
+2021-01-02 22:43:02,305 [INFO] root: 386 files TAGGED
+2021-01-02 22:43:02,307 [INFO] root: 0 files ALREADY TAGGED
+2021-01-02 22:43:02,307 [INFO] root: 0 files NOT TAGGED
+2021-01-03 17:35:21,479 [INFO] root: STEP 1 ---> Loading tagged photos
+2021-01-03 17:35:21,481 [INFO] root:        1/1 = Loading folder /Volumes/photo/iPhoneXS/
+2021-01-03 17:37:53,060 [INFO] root: STEP 2 ---> Tag photos
+2021-01-03 17:39:08,862 [INFO] root: ------- GPS TAG RESULTS ------- 
+2021-01-03 17:39:08,864 [INFO] root: 46 files TAGGED
+2021-01-03 17:39:08,865 [INFO] root: 384 files ALREADY TAGGED
+2021-01-03 17:39:08,866 [INFO] root: 0 files NOT TAGGED
+2021-01-09 12:08:35,181 [INFO] root: STEP 1 ---> Loading tagged photos
+2021-01-09 12:08:35,182 [INFO] root:        1/1 = Loading folder /Volumes/photo/iPhoneXS/
+2021-01-09 12:11:04,661 [INFO] root: STEP 2 ---> Tag photos
+2021-01-09 12:11:40,411 [INFO] root: ------- GPS TAG RESULTS ------- 
+2021-01-09 12:11:40,415 [INFO] root: 54 files TAGGED
+2021-01-09 12:11:40,416 [INFO] root: 0 files ALREADY TAGGED
+2021-01-09 12:11:40,416 [INFO] root: 0 files NOT TAGGED
+2021-01-16 13:17:46,414 [INFO] root: STEP 1 ---> Loading tagged photos
+2021-01-16 13:17:46,415 [INFO] root:        1/1 = Loading folder /Volumes/photo/iPhoneXS/
+2021-01-16 13:20:52,794 [INFO] root: STEP 1 ---> Loading tagged photos
+2021-01-16 13:20:52,796 [INFO] root:        1/1 = Loading folder /Volumes/photo/iPhoneXS/
+2021-01-16 13:22:37,806 [INFO] root: STEP 1 ---> Loading tagged photos
+2021-01-16 13:22:37,806 [INFO] root:        1/1 = Loading folder /Volumes/photo/iPhoneXS/
+2021-01-16 13:25:26,496 [INFO] root: STEP 1 ---> Loading tagged photos
+2021-01-16 13:25:26,498 [INFO] root:        1/1 = Loading folder /Volumes/photo/iPhoneXS/
+2021-01-16 13:36:32,283 [INFO] root: STEP 1 ---> Loading tagged photos
+2021-01-16 13:36:32,285 [INFO] root:        1/1 = Loading folder /Volumes/photo/iPhoneXS/
+2021-01-16 14:35:07,830 [INFO] root: STEP 1 ---> Loading tagged photos
+2021-01-16 14:35:07,834 [INFO] root:        1/1 = Loading folder /Volumes/photo/iPhoneXS/
+2021-01-16 14:37:24,013 [INFO] root: STEP 1 ---> Loading tagged photos
+2021-01-16 14:37:24,014 [INFO] root:        1/1 = Loading folder /Volumes/photo/iPhoneXS/

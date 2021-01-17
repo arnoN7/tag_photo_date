@@ -74,7 +74,7 @@ def load_tagged_folder(folders):
         logging.info('       %i/%i = Loading folder %s', folders.index(folder) + 1, len(folders), folder)
         os.chdir(folder)
         for file in tqdm(glob.glob("*.JP*G") + glob.glob("*.jp*g")):
-            date = get_file_date(file, True)
+            date = get_file_date(os.path.join(folder, file), True)
             if date is not None:
                 d.append(
                     {
