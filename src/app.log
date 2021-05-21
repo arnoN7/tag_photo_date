@@ -1,0 +1,10 @@
+2021-05-22 00:39:19,768 [INFO] root: STEP 1 ---> Loading tagged photos
+2021-05-22 00:39:19,768 [INFO] root:        1/1 = Loading folder /Volumes/photo/iPhoneXS/
+2021-05-22 00:41:49,389 [INFO] root: STEP 1 ---> Loading tagged photos
+2021-05-22 00:41:49,390 [INFO] root:        1/1 = Loading folder /Volumes/photo/iPhoneXS/
+2021-05-22 00:47:22,590 [INFO] root: STEP 1 ---> Loading tagged photos
+2021-05-22 00:47:22,591 [INFO] root:        1/1 = Loading folder /Volumes/photo/iPhoneXS/
+2021-05-22 00:48:29,759 [INFO] werkzeug:  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2021-05-22 00:49:01,571 [INFO] werkzeug:  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2021-05-22 00:49:33,315 [INFO] werkzeug: 127.0.0.1 - - [22/May/2021 00:49:33] "[37mGET / HTTP/1.1[0m" 200 -
+2021-05-22 00:49:33,764 [INFO] werkzeug: 127.0.0.1 - - [22/May/2021 00:49:33] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -

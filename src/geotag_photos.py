@@ -6,6 +6,10 @@ import logging
 import logging.config
 import argparse
 from utils import dir_path
+from flask import Flask
+from tqdm import tqdm
+app = Flask(__name__)
+
 
 log_dict = {
     'version': 1,
@@ -161,6 +165,7 @@ def log_stats():
     logging.info("%i files TAGGED", NB_TAGGED_FILE)
     logging.info("%i files ALREADY TAGGED", NB_ALREADY_TAGGED_FILE)
     logging.info("%i files NOT TAGGED", NB_NOT_TAGGED_FILE)
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--tag', type=dir_path, required=True, help='path to the folder with photos to tag')
@@ -168,20 +173,33 @@ def main():
                         help='path to the folder containing photo with GPS data')
     parser.add_argument('--delay', type=float,
                         help='max delay in days between GPS photo and photo to tag')
+    parser.add_argument('--server', action='store_true')
+
     parsed_args = parser.parse_args()
     if parsed_args.delay:
         global MAX_DELAY
         MAX_DELAY = parsed_args.delay
-    logging.info('STEP 1 ---> Loading tagged photos')
-    #for folder in parsed_args.gps:
-        #logging.info('       %i/%i = Loading folder %s', parsed_args.gps.index(folder) + 1, len(parsed_args.gps), folder)
-    load_tagged_folder(parsed_args.gps)
+    if parsed_args.server:
+        app.run()
+    else:
+        tag_photos(parsed_args.gps, parsed_args.tag)
 
+
+
+def tag_photos(gps_folder, photos_folder):
+    logging.info('STEP 1 ---> Loading tagged photos')
+    load_tagged_folder(gps_folder)
     logging.info('STEP 2 ---> Tag photos')
-    os.chdir(parsed_args.tag)
+    os.chdir(photos_folder)
     for file in tqdm(glob.glob("*.JP*G") + glob.glob("*.jp*g")):
         tag_photo(file)
     log_stats()
+
+
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
+
 
 if __name__ == "__main__":
     main()
