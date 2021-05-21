@@ -2,9 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="82d2fee2-c6d4-400e-91b5-875635a5ecd9" name="Default Changelist" comment="Add geotag feature">
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/app.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/retag_dates.py" beforeDir="false" afterPath="$PROJECT_DIR$/retag_dates.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/geotag_photos.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/geotag_photos.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/geotag_ui.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/geotag_ui.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/log.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/log.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logging.conf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/retag_dates.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/retag_dates.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +49,11 @@
       </console-settings>
     </option>
   </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
+    </key>
+  </component>
   <component name="RunManager" selected="Python.geotag_ui">
     <configuration name="Python" type="PythonConfigurationType" factoryName="Python">
       <module name="tag_photo_date" />
@@ -54,7 +67,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/retag_dates.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/retag_dates.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -75,7 +88,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/geotag_photos.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/geotag_photos.py" />
       <option name="PARAMETERS" value="--tag $USER_HOME$/Pictures/testgeotag/totag --gps $USER_HOME$/Pictures/testgeotag/tagged --delay 0.5" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -96,7 +109,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/geotag_ui.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/geotag_ui.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -121,5 +134,16 @@
       <updated>1608910688998</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

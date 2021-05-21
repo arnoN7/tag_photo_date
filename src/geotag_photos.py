@@ -2,8 +2,6 @@ import glob, os, sys, time
 import pandas as pd
 import piexif
 from datetime import datetime
-from tqdm import tqdm
-import log
 import logging
 import logging.config
 import argparse
