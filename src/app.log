@@ -8,3 +8,10 @@
 2021-05-22 00:49:01,571 [INFO] werkzeug:  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
 2021-05-22 00:49:33,315 [INFO] werkzeug: 127.0.0.1 - - [22/May/2021 00:49:33] "[37mGET / HTTP/1.1[0m" 200 -
 2021-05-22 00:49:33,764 [INFO] werkzeug: 127.0.0.1 - - [22/May/2021 00:49:33] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2021-05-22 01:47:50,847 [INFO] root: STEP 1 ---> Loading tagged photos
+2021-05-22 01:47:50,848 [INFO] root:        1/1 = Loading folder /Volumes/photo/iPhoneXS/
+2021-05-22 01:53:10,241 [INFO] root: STEP 2 ---> Tag photos
+2021-05-22 01:58:44,008 [INFO] root: ------- GPS TAG RESULTS ------- 
+2021-05-22 01:58:44,012 [INFO] root: 176 files TAGGED
+2021-05-22 01:58:44,014 [INFO] root: 0 files ALREADY TAGGED
+2021-05-22 01:58:44,014 [INFO] root: 0 files NOT TAGGED
