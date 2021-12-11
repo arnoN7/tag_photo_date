@@ -12,7 +12,7 @@ import mysql.connector
 from mysql.connector import errorcode
 from exif import *
 
-EUROPE_PARIS = "'Europe/Paris'"
+EUROPE_PARIS = "Europe/Paris"
 app = Flask(__name__)
 
 
@@ -189,6 +189,7 @@ def main():
                         help='max delay in days between GPS photo and photo to tag')
     parser.add_argument('--server', action='store_true')
     parser.add_argument('--db', nargs=4, help='host port user and password of hass db')
+    parser.add_argument('--tz', help='photo timezone')
 
     parsed_args = parser.parse_args()
     if parsed_args.delay:
@@ -198,13 +199,15 @@ def main():
         app.run()
     elif parsed_args.db:
         tag_photos_db(parsed_args.db[0], parsed_args.db[1], parsed_args.db[2],
-                      parsed_args.db[3], parsed_args.tag)
+                      parsed_args.db[3], parsed_args.tag, parsed_args.tz)
     else:
         tag_photos(parsed_args.gps, parsed_args.tag)
 
 
-def tag_photo_db(file, cnx):
+def tag_photo_db(file, cnx, tz):
     # Get file date
+    if tz is None :
+        tz = EUROPE_PARIS
     date = get_file_date(file, False)
     # Get GPS coordinates
     cursor = cnx.cursor()
@@ -213,13 +216,14 @@ def tag_photo_db(file, cnx):
     CAST(json_extract(attributes, '$.longitude')as FLOAT) as longitude, \
     CAST(json_extract(attributes, '$.altitude')as FLOAT) as altitude, \
     last_updated, \
-    ABS(TIMESTAMPDIFF(MINUTE, convert_tz('{date}'," + EUROPE_PARIS + ", 'Etc/UTC'), last_updated)) as diff \
+    ABS(TIMESTAMPDIFF(MINUTE, convert_tz('{date}', '{tz}', 'Etc/UTC'), last_updated)) as diff \
     from states s \
     WHERE entity_id LIKE '%device_tracker%' \
     and attributes LIKE '%longitude%' \
     and last_updated < DATE_ADD('{date}', INTERVAL +1 DAY) \
     and last_updated > DATE_ADD('{date}', INTERVAL -1 DAY) \
-    ORDER BY diff ASC LIMIT 1;")).format(date=date)
+    having diff IS NOT NULL \
+    ORDER BY diff ASC LIMIT 1;")).format(date=date, tz=tz)
     #cursor.execute("SELECT * FROM states WHERE state_id = '1016218'")
     cursor.execute(query)
     for (s_id, latitude, longitude, altitude, last_updated, diff) in cursor:
@@ -232,7 +236,7 @@ def tag_photo_db(file, cnx):
     return
 
 
-def tag_photos_db(host, port, user, pwd, photos_folder):
+def tag_photos_db(host, port, user, pwd, photos_folder, timezone):
     logging.info('STEP 1 ---> Connecting db {host}:{port} user:{user} password:{pwd}'.
                  format(host=host, port=port, user=user, pwd=pwd))
     try:
@@ -249,7 +253,7 @@ def tag_photos_db(host, port, user, pwd, photos_folder):
         logging.info("Connexion OK!")
         os.chdir(photos_folder)
         for file in tqdm(glob.glob("*.JP*G") + glob.glob("*.jp*g")):
-            tag_photo_db(file, cnx)
+            tag_photo_db(file, cnx, timezone)
         cnx.close()
     log_stats()
 
