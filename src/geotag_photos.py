@@ -8,6 +8,11 @@ import argparse
 from utils import dir_path
 from flask import Flask
 from tqdm import tqdm
+import mysql.connector
+from mysql.connector import errorcode
+from exif import *
+
+EUROPE_PARIS = "'Europe/Paris'"
 app = Flask(__name__)
 
 
@@ -36,7 +41,7 @@ log_dict = {
         '': {
             'handlers': ['file_handler', 'default'],
             'propagate': True,
-            'level': 'INFO'
+            'level': 'DEBUG'
         },
     }
 }
@@ -111,23 +116,32 @@ def get_file_date(file, checkGPS):
 def nearest(items, pivot):
     return min(items, key=lambda x: abs(x - pivot))
 
+def print_exif(file):
+    exif_dict = piexif.load(file)
+    if (1 in exif_dict['GPS']):
+        logging.info(exif_dict['GPS'])
+
 def assign_geotag_from_file(file, tagged_file):
     exif_dict_tagged = piexif.load(tagged_file)
+    if (1 not in exif_dict_tagged['GPS']):
+        global NB_NOT_TAGGED_FILE
+        NB_NOT_TAGGED_FILE = NB_NOT_TAGGED_FILE + 1
+        logging.debug(' %s ignored no GPS Tag in GPS file %s', file, tagged_file)
+        return False
+    assign_geotag_from_exif(file, exif_dict_tagged)
+    logging.debug('%s file tagged with GPS File %s', file, tagged_file)
+    return True
+
+def assign_geotag_from_exif(file, exif_tagged):
     exif_dict = piexif.load(file)
     if (1 in exif_dict['GPS']):
         global NB_ALREADY_TAGGED_FILE
         NB_ALREADY_TAGGED_FILE = NB_ALREADY_TAGGED_FILE + 1
         logging.debug('File %s ignored already GPS Tagged ', file)
         return False
-    if (1 not in exif_dict_tagged['GPS']):
-        global NB_NOT_TAGGED_FILE
-        NB_NOT_TAGGED_FILE = NB_NOT_TAGGED_FILE + 1
-        logging.debug(' %s ignored no GPS Tag in GPS file %s', file, tagged_file)
-        return False
-    exif_dict['GPS'] = exif_dict_tagged['GPS']
+    exif_dict['GPS'] = exif_tagged['GPS']
     exif_bytes = piexif.dump(exif_dict)
     piexif.insert(exif_bytes, file)
-    logging.debug('%s file tagged with GPS File %s', file, tagged_file)
     global NB_TAGGED_FILE
     NB_TAGGED_FILE = NB_TAGGED_FILE + 1
     return True
@@ -169,11 +183,12 @@ def log_stats():
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--tag', type=dir_path, required=True, help='path to the folder with photos to tag')
-    parser.add_argument('--gps', type=dir_path, nargs="+", required=True,
+    parser.add_argument('--gps', type=dir_path, nargs="+",
                         help='path to the folder containing photo with GPS data')
     parser.add_argument('--delay', type=float,
                         help='max delay in days between GPS photo and photo to tag')
     parser.add_argument('--server', action='store_true')
+    parser.add_argument('--db', nargs=4, help='host port user and password of hass db')
 
     parsed_args = parser.parse_args()
     if parsed_args.delay:
@@ -181,10 +196,62 @@ def main():
         MAX_DELAY = parsed_args.delay
     if parsed_args.server:
         app.run()
+    elif parsed_args.db:
+        tag_photos_db(parsed_args.db[0], parsed_args.db[1], parsed_args.db[2],
+                      parsed_args.db[3], parsed_args.tag)
     else:
         tag_photos(parsed_args.gps, parsed_args.tag)
 
 
+def tag_photo_db(file, cnx):
+    # Get file date
+    date = get_file_date(file, False)
+    # Get GPS coordinates
+    cursor = cnx.cursor()
+    query = (("SELECT state_id, \
+    CAST(json_extract(attributes, '$.latitude') as FLOAT) as latitude, \
+    CAST(json_extract(attributes, '$.longitude')as FLOAT) as longitude, \
+    CAST(json_extract(attributes, '$.altitude')as FLOAT) as altitude, \
+    last_updated, \
+    ABS(TIMESTAMPDIFF(MINUTE, convert_tz('{date}'," + EUROPE_PARIS + ", 'Etc/UTC'), last_updated)) as diff \
+    from states s \
+    WHERE entity_id LIKE '%device_tracker%' \
+    and attributes LIKE '%longitude%' \
+    and last_updated < DATE_ADD('{date}', INTERVAL +1 DAY) \
+    and last_updated > DATE_ADD('{date}', INTERVAL -1 DAY) \
+    ORDER BY diff ASC LIMIT 1;")).format(date=date)
+    #cursor.execute("SELECT * FROM states WHERE state_id = '1016218'")
+    cursor.execute(query)
+    for (s_id, latitude, longitude, altitude, last_updated, diff) in cursor:
+        """logging.info(("latitude:{la} longitude:{lo} altitude:{al} time:{ti} diff:{di} min "
+                      "date photo:{da}").\
+            format(la=latitude, lo=longitude, al=altitude, ti=last_updated,
+                   di=diff, da=date))"""
+        exif = get_exif_from_gps(file, float(latitude), float(longitude), float(altitude))
+        assign_geotag_from_exif(file, exif)
+    return
+
+
+def tag_photos_db(host, port, user, pwd, photos_folder):
+    logging.info('STEP 1 ---> Connecting db {host}:{port} user:{user} password:{pwd}'.
+                 format(host=host, port=port, user=user, pwd=pwd))
+    try:
+        cnx = mysql.connector.connect(user=user, password=pwd,
+                                      host=host, database=user, port=port)
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            logging.error("Something is wrong with your user name or password")
+        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            logging.error("Database does not exist")
+        else:
+            logging.error(err)
+    else:
+        logging.info("Connexion OK!")
+        os.chdir(photos_folder)
+        for file in tqdm(glob.glob("*.JP*G") + glob.glob("*.jp*g")):
+            tag_photo_db(file, cnx)
+        cnx.close()
+    log_stats()
 
 def tag_photos(gps_folder, photos_folder):
     logging.info('STEP 1 ---> Loading tagged photos')
