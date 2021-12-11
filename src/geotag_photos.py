@@ -188,7 +188,7 @@ def main():
     parser.add_argument('--delay', type=float,
                         help='max delay in days between GPS photo and photo to tag')
     parser.add_argument('--server', action='store_true')
-    parser.add_argument('--db', nargs=4, help='host port user and password of hass db')
+    parser.add_argument('--db', nargs=5, help='host port db user and password of hass db')
     parser.add_argument('--tz', help='photo timezone')
 
     parsed_args = parser.parse_args()
@@ -199,7 +199,7 @@ def main():
         app.run()
     elif parsed_args.db:
         tag_photos_db(parsed_args.db[0], parsed_args.db[1], parsed_args.db[2],
-                      parsed_args.db[3], parsed_args.tag, parsed_args.tz)
+                      parsed_args.db[3], parsed_args.db[4], parsed_args.tag, parsed_args.tz)
     else:
         tag_photos(parsed_args.gps, parsed_args.tag)
 
@@ -236,7 +236,7 @@ def tag_photo_db(file, cnx, tz):
     return
 
 
-def tag_photos_db(host, port, user, pwd, photos_folder, timezone):
+def tag_photos_db(host, port, db, user, pwd, photos_folder, timezone):
     logging.info('STEP 1 ---> Connecting db {host}:{port} user:{user} password:{pwd}'.
                  format(host=host, port=port, user=user, pwd=pwd))
     try:
