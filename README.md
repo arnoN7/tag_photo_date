@@ -1,5 +1,5 @@
 # geotag_photos.py
-Add GPS coordinates to non tagged EXIF taken with a DSLR Camera for example using your smartphone photos or Home Assistant DB
+Add GPS coordinates to non tagged EXIF taken by a DSLR Camera for example using your smartphone photos or Home Assistant DB
 ## Tag with Home Assistant DB - Example
 python ./geotag_photos.py --db IP_DB_HASS PORT_DB_HASS DB_HASS DB_USER_HASS PWD_HASS --tz Europe/Paris --tag /Volumes/photo/2021_09\ Jardin\ d\'acclimatation/
 
