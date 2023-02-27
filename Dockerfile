@@ -5,6 +5,7 @@ RUN apt-get update \
   && cd /usr/local/bin \
   && ln -s /usr/bin/python3 python \
   && pip3 install --upgrade pip
+RUN apt-get update
 RUN apt install locales locales-all -y
 RUN locale-gen en_US.UTF-8
 RUN update-locale LANG=en_US.UTF-8
