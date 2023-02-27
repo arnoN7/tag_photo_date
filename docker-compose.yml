@@ -4,3 +4,5 @@ services:
     build: .
     ports:
       - "10600:5000"
+    volumes:
+      - "/photo:/volume1/photo"

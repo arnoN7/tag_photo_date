@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="82d2fee2-c6d4-400e-91b5-875635a5ecd9" name="Default Changelist" comment="Add geotag feature">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +86,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/geotag_photos.py" />
-      <option name="PARAMETERS" value="--db 10.2.0.0 9012 db_home_analytics db_home_analytics 5689d5595814c9587fb71377a3efa851 --tz Europe/Paris --tag &quot;/Volumes/photo/2023_02 Mont-Dore&quot;" />
+      <option name="PARAMETERS" value="--db 192.168.1.27 9012 db_home_analytics db_home_analytics 5689d5595814c9587fb71377a3efa851 --tz Europe/Paris --tag &quot;/Volumes/photo/2023_02 Mont-Dore&quot;" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -144,7 +144,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677509514458</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Add geotag feature">
+      <created>1677509971695</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1677509971695</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
