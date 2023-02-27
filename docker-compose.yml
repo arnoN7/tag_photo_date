@@ -5,4 +5,4 @@ services:
     ports:
       - "10600:5000"
     volumes:
-      - "/photo:/volume1/photo"
+      - "/volume1/photo:/photo"
