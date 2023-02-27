@@ -212,14 +212,15 @@ def tag_photo_db(file, cnx, tz):
     # Get GPS coordinates
     cursor = cnx.cursor()
     query = (("SELECT state_id, \
-    CAST(json_extract(attributes, '$.latitude') as FLOAT) as latitude, \
-    CAST(json_extract(attributes, '$.longitude')as FLOAT) as longitude, \
-    CAST(json_extract(attributes, '$.altitude')as FLOAT) as altitude, \
+    CAST(json_extract(sa.shared_attrs, '$.latitude') as FLOAT) as latitude, \
+    CAST(json_extract(sa.shared_attrs, '$.longitude')as FLOAT) as longitude, \
+    CAST(json_extract(sa.shared_attrs, '$.altitude')as FLOAT) as altitude, \
     last_updated, \
     ABS(TIMESTAMPDIFF(MINUTE, convert_tz('{date}', '{tz}', 'Etc/UTC'), last_updated)) as diff \
     from states s \
+    join state_attributes sa on s.attributes_id = sa.attributes_id \
     WHERE entity_id LIKE '%device_tracker%' \
-    and attributes LIKE '%longitude%' \
+    and sa.shared_attrs LIKE '%longitude%' \
     and last_updated < DATE_ADD('{date}', INTERVAL +1 DAY) \
     and last_updated > DATE_ADD('{date}', INTERVAL -1 DAY) \
     having diff IS NOT NULL \

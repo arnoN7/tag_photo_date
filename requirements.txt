@@ -3,3 +3,4 @@ piexif
 argparse
 flask
 tqdm
+mysql-connector-python-rf

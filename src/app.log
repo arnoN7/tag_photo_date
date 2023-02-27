@@ -17,3 +17,9 @@
 2021-05-22 01:58:44,014 [INFO] root: 0 files NOT TAGGED
 2021-05-23 00:08:25,198 [INFO] root: STEP 1 ---> Loading tagged photos
 2021-05-23 00:08:25,199 [INFO] root:        1/1 = Loading folder /Volumes/photo/iPhoneXS/
+2022-02-27 23:38:22,362 [INFO] root: STEP 1 ---> Connecting db 192.168.1.27:9012 user:db_home_analytics password:5689d5595814c9587fb71377a3efa851
+2022-02-27 23:38:22,417 [INFO] root: Connexion OK!
+2022-02-27 23:43:04,176 [INFO] root: ------- GPS TAG RESULTS ------- 
+2022-02-27 23:43:04,176 [INFO] root: 218 files TAGGED
+2022-02-27 23:43:04,177 [INFO] root: 0 files ALREADY TAGGED
+2022-02-27 23:43:04,177 [INFO] root: 0 files NOT TAGGED
