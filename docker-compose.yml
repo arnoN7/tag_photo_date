@@ -3,5 +3,7 @@ services:
   tag:
     build: .
     network_mode: host
+    ports:
+      - "10600:5000"
     volumes:
       - "/volume1/photo:/photo"
