@@ -1,9 +1,18 @@
 # geotag_photos.py
 Add GPS coordinates to non tagged EXIF taken by a DSLR Camera for example using your smartphone photos or Home Assistant DB
 ## Tag with Home Assistant DB - Example
-python ./geotag_photos.py --db IP_DB_HASS PORT_DB_HASS DB_HASS DB_USER_HASS PWD_HASS --tz Europe/Paris --tag /Volumes/photo/2021_09\ Jardin\ d\'acclimatation/
 
-python ./src/geotag_photos.py --db server port db user password --tz Europe/Paris --tag ./photos
+python ./src/geotag_photos.py --tz Europe/Paris --tag ./photos
+.venv should be defined in the same folder as the script with the following content
+```
+# Database Configuration
+DB_HOST=[HOST_IP]
+DB_PORT=[HOST_PORT]
+DB_NAME=[DATABASE_NAME]
+DB_USER=[DATABASE_USER]
+DB_PASSWORD=[DATABASE_PASSWORD]
+```
+
 
 
 # tag_photo_date
