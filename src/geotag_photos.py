@@ -11,9 +11,13 @@ from tqdm import tqdm
 import mysql.connector
 from mysql.connector import errorcode
 from exif import *
+import psycopg2
+from psycopg2 import OperationalError
+from dotenv import load_dotenv
 
 EUROPE_PARIS = "Europe/Paris"
 app = Flask(__name__)
+load_dotenv()
 
 
 log_dict = {
@@ -132,9 +136,9 @@ def assign_geotag_from_file(file, tagged_file):
     logging.debug('%s file tagged with GPS File %s', file, tagged_file)
     return True
 
-def assign_geotag_from_exif(file, exif_tagged):
+def assign_geotag_from_exif(file, exif_tagged, force=False):
     exif_dict = piexif.load(file)
-    if (1 in exif_dict['GPS']):
+    if not force and (1 in exif_dict['GPS']):
         global NB_ALREADY_TAGGED_FILE
         NB_ALREADY_TAGGED_FILE = NB_ALREADY_TAGGED_FILE + 1
         logging.debug('File %s ignored already GPS Tagged ', file)
@@ -187,51 +191,64 @@ def main():
                         help='path to the folder containing photo with GPS data')
     parser.add_argument('--delay', type=float,
                         help='max delay in days between GPS photo and photo to tag')
-    parser.add_argument('--server', action='store_true')
-    parser.add_argument('--db', nargs=5, help='host port db user and password of hass db')
     parser.add_argument('--tz', help='photo timezone')
-
     parsed_args = parser.parse_args()
+    load_dotenv()
     if parsed_args.delay:
         global MAX_DELAY
         MAX_DELAY = parsed_args.delay
-    if parsed_args.server:
-        app.run()
-    elif parsed_args.db:
-        tag_photos_db(parsed_args.db[0], parsed_args.db[1], parsed_args.db[2],
-                      parsed_args.db[3], parsed_args.db[4], parsed_args.tag, parsed_args.tz)
+    if os.getenv('DB_HOST'):
+        tag_photos_db(os.getenv('DB_HOST'), os.getenv('DB_PORT'), os.getenv('DB_NAME'),
+                      os.getenv('DB_USER'), os.getenv('DB_PASSWORD'), parsed_args.tag, parsed_args.tz)
     else:
         tag_photos(parsed_args.gps, parsed_args.tag)
 
 
-def tag_photo_db(file, cnx, tz):
+def tag_photo_db(file, cnx, tz, persons=["ARO"]):
     # Get file date
     if tz is None :
         tz = EUROPE_PARIS
     date = get_file_date(file, False)
+    if date is None:
+        logging.error("No date found in file %s", file)
+        return
     # Get GPS coordinates
     cursor = cnx.cursor()
-    query = (("SELECT state_id, \
-    CAST(json_extract(sa.shared_attrs, '$.latitude') as FLOAT) as latitude, \
-    CAST(json_extract(sa.shared_attrs, '$.longitude')as FLOAT) as longitude, \
-    CAST(json_extract(sa.shared_attrs, '$.altitude')as FLOAT) as altitude, \
-    last_updated, \
-    ABS(TIMESTAMPDIFF(MINUTE, convert_tz('{date}', '{tz}', 'Etc/UTC'), last_updated)) as diff \
-    from states s \
-    join state_attributes sa on s.attributes_id = sa.attributes_id \
-    WHERE entity_id LIKE '%device_tracker%' \
-    and sa.shared_attrs LIKE '%longitude%' \
-    and last_updated < DATE_ADD('{date}', INTERVAL +1 DAY) \
-    and last_updated > DATE_ADD('{date}', INTERVAL -1 DAY) \
-    having diff IS NOT NULL \
-    ORDER BY diff ASC LIMIT 1;")).format(date=date, tz=tz)
-    #cursor.execute("SELECT * FROM states WHERE state_id = '1016218'")
+    query = """
+    SELECT state_id,
+        (sa.shared_attrs::json ->> 'latitude')::FLOAT AS latitude,
+        (sa.shared_attrs::json ->> 'longitude')::FLOAT AS longitude,
+        (sa.shared_attrs::json ->> 'altitude')::FLOAT AS altitude,
+        last_updated,
+        ABS(EXTRACT(EPOCH FROM (timezone('{tz}', TIMESTAMP '{date}'))) - last_updated_ts) AS diff
+    FROM states s
+    JOIN state_attributes sa ON s.attributes_id = sa.attributes_id
+    WHERE 
+        last_updated_ts BETWEEN EXTRACT(EPOCH FROM timezone('{tz}', TIMESTAMP '{date}') - INTERVAL '1 day')
+                           AND EXTRACT(EPOCH FROM timezone('{tz}', TIMESTAMP '{date}') + INTERVAL '1 day')
+        AND last_updated_ts IS NOT NULL
+        and (sa.shared_attrs::json ->> 'longitude') is not null
+        and (sa.shared_attrs::json ->> 'altitude') is not null
+        and (sa.shared_attrs::json ->> 'latitude') is not null
+        AND (
+    """.format(date=date, tz=tz)
+
+    for index, person in enumerate(persons):
+        if index:
+            query += " OR"
+        query += " UPPER((sa.shared_attrs::json ->> 'friendly_name')::VARCHAR) LIKE '%{}%'".format(person.upper())
+
+    query += """)
+    ORDER BY diff ASC
+    LIMIT 1;
+    """
+    #print(query)
     cursor.execute(query)
     for (s_id, latitude, longitude, altitude, last_updated, diff) in cursor:
-        """logging.info(("latitude:{la} longitude:{lo} altitude:{al} time:{ti} diff:{di} min "
+        """ logging.info(("latitude:{la} longitude:{lo} altitude:{al} time:{ti} diff:{di} min "
                       "date photo:{da}").\
             format(la=latitude, lo=longitude, al=altitude, ti=last_updated,
-                   di=diff, da=date))"""
+                   di=diff, da=date)) """
         exif = get_exif_from_gps(file, float(latitude), float(longitude), float(altitude))
         assign_geotag_from_exif(file, exif)
     return
@@ -241,17 +258,18 @@ def tag_photos_db(host, port, db, user, pwd, photos_folder, timezone):
     logging.info('STEP 1 ---> Connecting db {host}:{port} user:{user} password:{pwd}'.
                  format(host=host, port=port, user=user, pwd=pwd))
     try:
-        cnx = mysql.connector.connect(user=user, password=pwd,
-                                      host=host, database=user, port=port)
-    except mysql.connector.Error as err:
-        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            logging.error("Something is wrong with your user name or password")
-        elif err.errno == errorcode.ER_BAD_DB_ERROR:
-            logging.error("Database does not exist")
-        else:
-            logging.error(err)
+        cnx = psycopg2.connect(
+            dbname=db,
+            user=user,
+            password=pwd,
+            host=host,
+            port=port
+        )
+    except OperationalError as err:
+        logging.error(f"Database connection error: {err}")
+        return
     else:
-        logging.info("Connexion OK!")
+        logging.info("Connection OK!")
         os.chdir(photos_folder)
         for file in tqdm(glob.glob("*.JP*G") + glob.glob("*.jp*g")):
             tag_photo_db(file, cnx, timezone)
@@ -275,3 +293,4 @@ def hello_world():
 
 if __name__ == "__main__":
     main()
+

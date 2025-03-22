@@ -1,18 +1,6 @@
-2023-02-26 23:14:51,933 [INFO] root: STEP 1 ---> Connecting db 10.2.0.0:9012 user:db_home_analytics password:5689d5595814c9587fb71377a3efa851
-2023-02-26 23:14:52,842 [INFO] root: Connexion OK!
-2023-02-26 23:16:31,403 [INFO] root: ------- GPS TAG RESULTS ------- 
-2023-02-26 23:16:31,406 [INFO] root: 0 files TAGGED
-2023-02-26 23:16:31,407 [INFO] root: 0 files ALREADY TAGGED
-2023-02-26 23:16:31,407 [INFO] root: 0 files NOT TAGGED
-2023-02-26 23:26:24,319 [INFO] root: STEP 1 ---> Connecting db 10.2.0.0:9012 user:db_home_analytics password:5689d5595814c9587fb71377a3efa851
-2023-02-26 23:26:24,632 [INFO] root: Connexion OK!
-2023-02-26 23:26:24,660 [INFO] root: ------- GPS TAG RESULTS ------- 
-2023-02-26 23:26:24,660 [INFO] root: 0 files TAGGED
-2023-02-26 23:26:24,660 [INFO] root: 0 files ALREADY TAGGED
-2023-02-26 23:26:24,660 [INFO] root: 0 files NOT TAGGED
-2023-02-26 23:27:15,636 [INFO] root: STEP 1 ---> Connecting db 10.2.0.0:9012 user:db_home_analytics password:5689d5595814c9587fb71377a3efa851
-2023-02-26 23:27:15,903 [INFO] root: Connexion OK!
-2023-02-27 00:12:17,551 [INFO] root: STEP 1 ---> Connecting db 10.2.0.0:9012 user:db_home_analytics password:5689d5595814c9587fb71377a3efa851
-2023-02-27 00:12:17,824 [INFO] root: Connexion OK!
-2023-02-27 00:12:51,414 [INFO] root: STEP 1 ---> Connecting db 10.2.0.0:9012 user:db_home_analytics password:5689d5595814c9587fb71377a3efa851
-2023-02-27 00:12:51,665 [INFO] root: Connexion OK!
+2025-03-22 08:14:40,274 [INFO] root: STEP 1 ---> Connecting db 192.168.1.27:9015 user:hadbpg password:9376d9899156e0053ac77412c2adb002
+2025-03-22 08:14:40,388 [INFO] root: Connection OK!
+2025-03-22 08:14:40,401 [INFO] root: ------- GPS TAG RESULTS ------- 
+2025-03-22 08:14:40,401 [INFO] root: 0 files TAGGED
+2025-03-22 08:14:40,401 [INFO] root: 0 files ALREADY TAGGED
+2025-03-22 08:14:40,401 [INFO] root: 0 files NOT TAGGED
