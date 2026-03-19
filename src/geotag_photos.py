@@ -136,7 +136,7 @@ def assign_geotag_from_file(file, tagged_file):
     logging.debug('%s file tagged with GPS File %s', file, tagged_file)
     return True
 
-def assign_geotag_from_exif(file, exif_tagged, force=False):
+def assign_geotag_from_exif(file, exif_tagged, force=os.getenv('FORCE_UPDATE', 'False').lower() == 'true'):
     exif_dict = piexif.load(file)
     if not force and (1 in exif_dict['GPS']):
         global NB_ALREADY_TAGGED_FILE
@@ -193,18 +193,19 @@ def main():
                         help='max delay in days between GPS photo and photo to tag')
     parser.add_argument('--tz', help='photo timezone')
     parsed_args = parser.parse_args()
+    persons = os.getenv("PERSONS", "").split(",")
     load_dotenv()
     if parsed_args.delay:
         global MAX_DELAY
         MAX_DELAY = parsed_args.delay
     if os.getenv('DB_HOST'):
         tag_photos_db(os.getenv('DB_HOST'), os.getenv('DB_PORT'), os.getenv('DB_NAME'),
-                      os.getenv('DB_USER'), os.getenv('DB_PASSWORD'), parsed_args.tag, parsed_args.tz)
+                      os.getenv('DB_USER'), os.getenv('DB_PASSWORD'), parsed_args.tag, parsed_args.tz, persons=persons)
     else:
         tag_photos(parsed_args.gps, parsed_args.tag)
 
 
-def tag_photo_db(file, cnx, tz, persons=["ARO"]):
+def tag_photo_db(file, cnx, tz, persons=["IPHONEARO", "IPHONEAS"]):
     # Get file date
     if tz is None :
         tz = EUROPE_PARIS
@@ -254,7 +255,7 @@ def tag_photo_db(file, cnx, tz, persons=["ARO"]):
     return
 
 
-def tag_photos_db(host, port, db, user, pwd, photos_folder, timezone):
+def tag_photos_db(host, port, db, user, pwd, photos_folder, timezone, persons=["IPHONEARO", "IPHONEAS"]):
     logging.info('STEP 1 ---> Connecting db {host}:{port} user:{user} password:{pwd}'.
                  format(host=host, port=port, user=user, pwd=pwd))
     try:
@@ -272,7 +273,7 @@ def tag_photos_db(host, port, db, user, pwd, photos_folder, timezone):
         logging.info("Connection OK!")
         os.chdir(photos_folder)
         for file in tqdm(glob.glob("*.JP*G") + glob.glob("*.jp*g")):
-            tag_photo_db(file, cnx, timezone)
+            tag_photo_db(file, cnx, timezone, persons=persons)
         cnx.close()
     log_stats()
 

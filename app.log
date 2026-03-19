@@ -1,6 +1,0 @@
-2025-03-22 08:14:40,274 [INFO] root: STEP 1 ---> Connecting db 192.168.1.27:9015 user:hadbpg password:9376d9899156e0053ac77412c2adb002
-2025-03-22 08:14:40,388 [INFO] root: Connection OK!
-2025-03-22 08:14:40,401 [INFO] root: ------- GPS TAG RESULTS ------- 
-2025-03-22 08:14:40,401 [INFO] root: 0 files TAGGED
-2025-03-22 08:14:40,401 [INFO] root: 0 files ALREADY TAGGED
-2025-03-22 08:14:40,401 [INFO] root: 0 files NOT TAGGED
